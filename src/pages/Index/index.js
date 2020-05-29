@@ -23,7 +23,7 @@ class Index extends Component {
 
   // 发请求获取轮播图图片
   getSwiper = async () => {
-    const { data: { status, body } } = await http.get('/home/swiper')
+    const { status, body } = await http.get('/home/swiper')
     // 请求成功后修改swiper的数据
     if (status === 200) {
       this.setState({
