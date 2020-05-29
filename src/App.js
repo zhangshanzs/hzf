@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 // 导入组件
 import Home from './pages/Home'
 import CityList from './pages/CityList'
@@ -13,9 +13,9 @@ function App() {
       {/* 配置路由 */}
       <Router>
         <div className="nav">
-          <Link to="/home">home</Link>
+          {/* <Link to="/home">home</Link>
           <Link to="/cityList">cityList</Link>
-          <Link to="/map">map</Link>
+          <Link to="/map">map</Link> */}
         </div>
         <Switch>
           <Redirect exact from="/" to="/home" />

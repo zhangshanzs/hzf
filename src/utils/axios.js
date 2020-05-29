@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // 基地址
-const BASE_URL = 'http://api-haoke-dev.itheima.net';
+const BASE_URL = 'https://api-haoke-web.itheima.net';
 // 使用自定义配置新建axios实例
 const http = axios.create({
   baseURL: BASE_URL,
