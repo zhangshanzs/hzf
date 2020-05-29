@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import { Carousel } from 'antd-mobile';
 // 导入封装后的axios
 import http, { BASE_URL } from '../../utils/axios'
+import { getSwiper } from '../../utils/api/home'
 
 
 class Index extends Component {
@@ -23,7 +24,7 @@ class Index extends Component {
 
   // 发请求获取轮播图图片
   getSwiper = async () => {
-    const { status, body } = await http.get('/home/swiper')
+    const { status, body } = await getSwiper()
     // 请求成功后修改swiper的数据
     if (status === 200) {
       this.setState({
