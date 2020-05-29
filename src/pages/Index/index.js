@@ -50,7 +50,7 @@ class Index extends Component {
               <a
                 key={item.id}
                 href={BASE_URL}
-                style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
+                style={{ display: 'inline-block', width: '100%', background: 'gray', height: this.state.imgHeight }}
               >
                 <img
                   src={BASE_URL + item.imgSrc}
