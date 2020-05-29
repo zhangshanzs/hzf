@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 // 导入走马灯组件
 import { Carousel } from 'antd-mobile';
 // 导入封装后的axios
-import http, { BASE_URL } from '../../utils/axios'
+import { BASE_URL } from '../../utils/axios'
 import { getSwiper } from '../../utils/api/home'
 
 
@@ -15,6 +15,8 @@ class Index extends Component {
     swiper: [],
     // 默认高度
     imgHeight: 212,
+    // 是否自动播放
+    isPlay: false
   }
 
   // 调接口
@@ -29,6 +31,11 @@ class Index extends Component {
     if (status === 200) {
       this.setState({
         swiper: body
+      }, () => {
+        // swiper有数据后改变isPlay的状态
+        this.setState({
+          isPlay: true
+        })
       })
     }
   }
@@ -37,8 +44,8 @@ class Index extends Component {
   renderCarousel = () => {
     return (
       <Carousel
-        // 自动播放
-        autoplay={false}
+        // 自动播放--响应式数据，swiper里面有数据之后改为true
+        autoplay={this.state.isPlay}
         // 无限循环
         infinite
         beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}

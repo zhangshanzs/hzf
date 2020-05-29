@@ -23,6 +23,7 @@ ul,li {
 }
 
 * {
-    
+  /* 解决轮播图滑动出现警告 */
+    touch-action: pan-y;
     box-sizing: border-box; 
 }
