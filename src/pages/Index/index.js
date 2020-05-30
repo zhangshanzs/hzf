@@ -3,11 +3,15 @@
  */
 import React, { Component } from 'react';
 // 导入走马灯组件
-import { Carousel } from 'antd-mobile';
+import { Carousel, Flex } from 'antd-mobile';
 // 导入封装后的axios
 import { BASE_URL } from '../../utils/axios'
 import { getSwiper } from '../../utils/api/home'
+// 导入样式
+import './index.css'
 
+// 导入栏目导航数据
+import Navs from '../../utils/navConfig'
 
 class Index extends Component {
   state = {
@@ -78,15 +82,43 @@ class Index extends Component {
       </Carousel>
     )
   }
+
+  // 渲染栏目导航组件
+  renderNavs = () => {
+    return (
+      <Flex className="nav">
+        {
+          Navs.map((item) => {
+            return (
+              <Flex.Item
+                // 栏目导航
+                onClick={() => this.props.history.push(item.path)}
+                key={item.id}>
+                <img src={item.img} alt={''} />
+                <p>{item.title}</p>
+              </Flex.Item>
+            )
+          })
+        }
+      </Flex>
+    )
+  }
+
   render() {
     return (
-      <div>
+      <div className="indexBox">
         {/* 轮播图 */}
         {
           this.renderCarousel()
         }
 
-      </div>
+        {/* 栏目导航 */}
+
+        {
+          this.renderNavs()
+        }
+
+      </div >
     );
   }
 }
