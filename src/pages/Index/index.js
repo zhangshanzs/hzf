@@ -29,18 +29,22 @@ class Index extends Component {
 
   // 调接口
   componentDidMount() {
-    this.getSwiper()
-    this.getGroup()
-    this.getNews()
+    // this.getSwiper()
+    // this.getGroup()
+    // this.getNews()
+    this.loadAll()
   }
 
-  // 发请求获取轮播图图片
-  getSwiper = async () => {
-    const { status, body } = await getSwiper()
-    // 请求成功后修改swiper的数据
-    if (status === 200) {
+
+  // 获取首页所有接口数据
+  loadAll = async () => {
+    const [swiper, group, news] = await Promise.all([getSwiper(), getGroup(), getNews()]);
+    // 2. 批量修改数据
+    if (swiper.status === 200) {
       this.setState({
-        swiper: body
+        swiper: swiper.body,
+        groups: group.body,
+        news: news.body
       }, () => {
         // swiper有数据后改变isPlay的状态
         this.setState({
@@ -48,27 +52,43 @@ class Index extends Component {
         })
       })
     }
-  }
 
-  // 发请求获取租房小组数据
-  getGroup = async () => {
-    const { status, body } = await getGroup()
-    if (status === 200) {
-      this.setState({
-        groups: body
-      })
-    }
   }
-
-  // 发请求获取最新资讯数据
-  getNews = async () => {
-    const { status, body } = await getNews()
-    if (status === 200) {
-      this.setState({
-        news: body
-      })
-    }
-  }
+  /*  // 发请求获取轮播图图片
+   getSwiper = async () => {
+     const { status, body } = await getSwiper()
+     // 请求成功后修改swiper的数据
+     if (status === 200) {
+       this.setState({
+         swiper: body
+       }, () => {
+         // swiper有数据后改变isPlay的状态
+         this.setState({
+           isPlay: true
+         })
+       })
+     }
+   }
+ 
+   // 发请求获取租房小组数据
+   getGroup = async () => {
+     const { status, body } = await getGroup()
+     if (status === 200) {
+       this.setState({
+         groups: body
+       })
+     }
+   }
+ 
+   // 发请求获取最新资讯数据
+   getNews = async () => {
+     const { status, body } = await getNews()
+     if (status === 200) {
+       this.setState({
+         news: body
+       })
+     }
+   } */
 
   // 渲染轮播图组件
   renderCarousel = () => {
