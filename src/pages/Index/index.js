@@ -3,12 +3,12 @@
  */
 import React, { Component } from 'react';
 // 导入走马灯组件
-import { Carousel, Flex } from 'antd-mobile';
+import { Carousel, Flex, Grid } from 'antd-mobile';
 // 导入封装后的axios
 import { BASE_URL } from '../../utils/axios'
-import { getSwiper } from '../../utils/api/home'
+import { getSwiper, getGroup } from '../../utils/api/home'
 // 导入样式
-import './index.css'
+import './index.scss'
 
 // 导入栏目导航数据
 import Navs from '../../utils/navConfig'
@@ -17,6 +17,8 @@ class Index extends Component {
   state = {
     // 轮播图图片
     swiper: [],
+    // 租房小组
+    groups: [],
     // 默认高度
     imgHeight: 212,
     // 是否自动播放
@@ -26,6 +28,7 @@ class Index extends Component {
   // 调接口
   componentDidMount() {
     this.getSwiper()
+    this.getGroup()
   }
 
   // 发请求获取轮播图图片
@@ -40,6 +43,16 @@ class Index extends Component {
         this.setState({
           isPlay: true
         })
+      })
+    }
+  }
+
+  // 发请求获取租房小组数据
+  getGroup = async () => {
+    const { status, body } = await getGroup()
+    if (status === 200) {
+      this.setState({
+        groups: body
       })
     }
   }
@@ -104,6 +117,35 @@ class Index extends Component {
     )
   }
 
+  // 渲染租房小组
+  renderGroup = () => {
+    return (
+      <div className="group">
+        {/* 标题 */}
+        <Flex className="group-title" justify="between">
+          <h3>租房小组</h3>
+          <span>更多</span>
+        </Flex>
+        {/* 内容 */}
+        <Grid data={this.state.groups}
+          columnNum={2}
+          hasLine={false}
+          square={false}
+          renderItem={item => (
+            <Flex className="grid-item" justify="between">
+              <div className="desc">
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </div>
+              <img src={`${BASE_URL}${item.imgSrc}`} alt="" />
+            </Flex>
+          )}
+        />
+      </div>
+    )
+  }
+
+
   render() {
     return (
       <div className="indexBox">
@@ -111,12 +153,15 @@ class Index extends Component {
         {
           this.renderCarousel()
         }
-
         {/* 栏目导航 */}
-
         {
           this.renderNavs()
         }
+        {/* 租房小组 */}
+        {
+          this.renderGroup()
+        }
+
 
       </div >
     );
