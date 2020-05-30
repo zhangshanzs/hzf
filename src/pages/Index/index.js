@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 // 导入走马灯组件
-import { Carousel, Flex, Grid, WingBlank } from 'antd-mobile';
+import { SearchBar, Carousel, Flex, Grid, WingBlank } from 'antd-mobile';
 // 导入封装后的axios
 import { BASE_URL } from '../../utils/axios'
 import { getSwiper, getGroup, getNews } from '../../utils/api/home'
@@ -15,6 +15,8 @@ import Navs from '../../utils/navConfig'
 
 class Index extends Component {
   state = {
+    // 搜索关键词
+    keyword: '',
     // 轮播图图片
     swiper: [],
     // 租房小组
@@ -89,6 +91,31 @@ class Index extends Component {
        })
      }
    } */
+
+  // 渲染顶部搜索导航
+  renderTopNav = () => {
+    return (
+      <Flex justify="around" className="topNav">
+        <div className="searchBox">
+          <div className="city" onClick={
+            () => this.props.history.push('/cityList')
+          }>
+            北京<i className="iconfont icon-arrow" />
+          </div>
+          <SearchBar
+            value={this.state.keyword}
+            onChange={(v) => this.setState({ keyword: v })}
+            placeholder="请输入小区或地址"
+          />
+        </div>
+        <div className="map" onClick={
+          () => this.props.history.push('/map')
+        }>
+          <i key="0" className="iconfont icon-map" />
+        </div>
+      </Flex>
+    )
+  }
 
   // 渲染轮播图组件
   renderCarousel = () => {
@@ -215,6 +242,10 @@ class Index extends Component {
   render() {
     return (
       <div className="indexBox">
+        {/* 顶部搜索导航*/}
+        {
+          this.renderTopNav()
+        }
         {/* 轮播图 */}
         {
           this.renderCarousel()
