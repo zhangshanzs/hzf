@@ -10,3 +10,15 @@ export function getCityInfo(name) {
     }
   })
 }
+
+
+/**
+ * 获取城市列表信息
+ */
+export function getCityList(level = 1) {
+  return http.get('/area/city', {
+    params: {
+      level
+    }
+  })
+}
