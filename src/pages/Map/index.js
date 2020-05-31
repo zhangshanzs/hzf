@@ -2,7 +2,12 @@
  * 地图找房
  */
 import React, { Component } from 'react';
+// 导入样式
 import './index.scss'
+// 导入组件
+import { NavBar, Icon } from 'antd-mobile';
+
+
 
 class Map extends Component {
   componentDidMount() {
@@ -22,9 +27,16 @@ class Map extends Component {
   render() {
     return (
       <div className="mapBox">
+        {/* NavBar */}
+        <NavBar
+          mode="dark"
+          icon={<Icon type="left" />}
+          onLeftClick={() => this.props.history.goBack()}
+        >地图找房</NavBar>
+
         {/* 地图 */}
         <div id="container"></div>
-      </div>
+      </div >
     );
   }
 }

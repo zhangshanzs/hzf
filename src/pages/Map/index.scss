@@ -1,3 +1,8 @@
-.mapBox,#container {
+.mapBox {
   height: 100%;
+}
+
+#container {
+  // 父元素-NavBar的高度---》解决滚动条问题
+ height: calc(100% - 45px);
 }
