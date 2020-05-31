@@ -27,3 +27,8 @@ ul,li {
     touch-action: pan-y;
     box-sizing: border-box; 
 }
+
+/* 设置容器大小,用于显示地图 */
+#root,.App {
+  height: 100%;
+}
