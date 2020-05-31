@@ -7,6 +7,7 @@ import { SearchBar, Carousel, Flex, Grid, WingBlank } from 'antd-mobile';
 // 导入封装后的axios
 import { BASE_URL } from '../../utils/axios'
 import { getSwiper, getGroup, getNews } from '../../utils/api/home'
+import { getCityInfo } from '../../utils/api/city'
 // 导入样式
 import './index.scss'
 
@@ -23,6 +24,11 @@ class Index extends Component {
     groups: [],
     // 最新资讯
     news: [],
+    // 当前定位城市
+    currCity: {
+      label: '--',
+      value: ''
+    },
     // 默认高度
     imgHeight: 212,
     // 是否自动播放
@@ -31,10 +37,8 @@ class Index extends Component {
 
   // 调接口
   componentDidMount() {
-    // this.getSwiper()
-    // this.getGroup()
-    // this.getNews()
     this.loadAll()
+    this.getCurrCity()
   }
 
 
@@ -56,41 +60,30 @@ class Index extends Component {
     }
 
   }
-  /*  // 发请求获取轮播图图片
-   getSwiper = async () => {
-     const { status, body } = await getSwiper()
-     // 请求成功后修改swiper的数据
-     if (status === 200) {
-       this.setState({
-         swiper: body
-       }, () => {
-         // swiper有数据后改变isPlay的状态
-         this.setState({
-           isPlay: true
-         })
-       })
-     }
-   }
- 
-   // 发请求获取租房小组数据
-   getGroup = async () => {
-     const { status, body } = await getGroup()
-     if (status === 200) {
-       this.setState({
-         groups: body
-       })
-     }
-   }
- 
-   // 发请求获取最新资讯数据
-   getNews = async () => {
-     const { status, body } = await getNews()
-     if (status === 200) {
-       this.setState({
-         news: body
-       })
-     }
-   } */
+
+  // 获取当前城市信息
+  getCurrCity = () => {
+    const { BMap } = window
+    // 使用百度地图LocalCity类获取当前城市名字
+    const myCity = new BMap.LocalCity();
+    myCity.get(async (result) => {
+      // 根据百度地图获取到城市名字
+      const cityName = result.name;
+      // console.log(cityName);
+
+      // 调用后台接口获取当前城市的详细数据
+      let { status, body } = await getCityInfo(cityName);
+      // console.log(status, body);
+
+      // 显示到页面上
+      if (status === 200) {
+        this.setState({
+          currCity: body
+        })
+      }
+
+    });
+  }
 
   // 渲染顶部搜索导航
   renderTopNav = () => {
@@ -100,7 +93,7 @@ class Index extends Component {
           <div className="city" onClick={
             () => this.props.history.push('/cityList')
           }>
-            北京<i className="iconfont icon-arrow" />
+            {this.state.currCity.label}<i className="iconfont icon-arrow" />
           </div>
           <SearchBar
             value={this.state.keyword}
@@ -125,8 +118,6 @@ class Index extends Component {
         autoplay={this.state.isPlay}
         // 无限循环
         infinite
-        beforeChange={(from, to) => console.log(`slide from ${from} to ${to}`)}
-        afterChange={index => console.log('slide to', index)}
       >
         {/* 遍历轮播图图片 */}
         {
