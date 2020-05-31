@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 // 导入封装后的axios
-import { getCityList } from '../../utils/api/city'
+import { getCityList, getHotCity } from '../../utils/api/city'
 
 
 class CityList extends Component {
@@ -19,6 +19,16 @@ class CityList extends Component {
       // 成功获取城市列表后处理数据
       const { cityList,
         cityIndex } = this.formatCities(body);
+
+      // 获取热门城市
+      // 起别名，避免引起混淆
+      const { status: sta, body: bd } = await getHotCity()
+      if (sta === 200) {
+        // {'hot':[{},{},..]}
+        cityList['hot'] = bd
+        // ['a','b','c',...,'hot']
+        cityIndex.unshift('hot')
+      }
       console.log('处理完的数据：', cityList, cityIndex)
     }
   }
