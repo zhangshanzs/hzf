@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 // 导入封装后的axios
 import { getCityList, getHotCity } from '../../utils/api/city'
 
+import { getCurrCity } from '../../utils/index'
 
 class CityList extends Component {
 
@@ -29,6 +30,11 @@ class CityList extends Component {
         // ['a','b','c',...,'hot']
         cityIndex.unshift('hot')
       }
+
+      // 获取当前定位城市
+      let currCity = await getCurrCity();
+      cityList['#'] = [currCity];
+      cityIndex.unshift('#');
       console.log('处理完的数据：', cityList, cityIndex)
     }
   }

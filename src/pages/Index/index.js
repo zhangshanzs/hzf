@@ -7,7 +7,9 @@ import { SearchBar, Carousel, Flex, Grid, WingBlank } from 'antd-mobile';
 // 导入封装后的axios
 import { BASE_URL } from '../../utils/axios'
 import { getSwiper, getGroup, getNews } from '../../utils/api/home'
-import { getCityInfo } from '../../utils/api/city'
+
+// 封装后的定位当前城市
+import { getCurrCity } from '../../utils/index'
 // 导入样式
 import './index.scss'
 
@@ -62,27 +64,11 @@ class Index extends Component {
   }
 
   // 获取当前城市信息
-  getCurrCity = () => {
-    const { BMap } = window
-    // 使用百度地图LocalCity类获取当前城市名字
-    const myCity = new BMap.LocalCity();
-    myCity.get(async (result) => {
-      // 根据百度地图获取到城市名字
-      const cityName = result.name;
-      // console.log(cityName);
-
-      // 调用后台接口获取当前城市的详细数据
-      let { status, body } = await getCityInfo(cityName);
-      // console.log(status, body);
-
-      // 显示到页面上
-      if (status === 200) {
-        this.setState({
-          currCity: body
-        })
-      }
-
-    });
+  getCurrCity = async () => {
+    const res = await getCurrCity()
+    this.setState({
+      currCity: res
+    })
   }
 
   // 渲染顶部搜索导航
