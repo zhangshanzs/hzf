@@ -7,10 +7,20 @@
 
 import { getCityInfo } from './api/city'
 
+export const setLocalData = (key, val) => {
+  localStorage.setItem(key, val)
+}
+export const getLocalData = (key) => {
+  return localStorage.getItem(key)
+}
+export const removeLocalData = (key) => {
+  localStorage.removeItem(key)
+}
+
 const CURR_CITY = 'CURR_CITY';
 export function getCurrCity() {
   // 从本地获取定位信息
-  const currCity = JSON.parse(localStorage.getItem(CURR_CITY))
+  const currCity = JSON.parse(getLocalData(CURR_CITY))
   if (!currCity) {
     // 没有本地数据
     return new Promise((reslove, reject) => {
@@ -27,7 +37,7 @@ export function getCurrCity() {
         // console.log(status, body);
         if (status === 200) {
           // 存储到本地
-          localStorage.setItem(CURR_CITY, JSON.stringify(body))
+          setLocalData(CURR_CITY, JSON.stringify(body))
           reslove(body)
         } else {
           reject('error')
