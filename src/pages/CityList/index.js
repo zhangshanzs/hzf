@@ -8,11 +8,12 @@ import { getCityList, getHotCity } from '../../utils/api/city'
 import { getCurrCity } from '../../utils/index'
 
 // 导入列表组件
-import { List } from 'react-virtualized'
+import { List, AutoSizer } from 'react-virtualized'
+
+import './index.scss'
 
 // list组件所用假数据
 const list = Array.from(new Array(100)).map((item, index) => index)
-console.log(list);
 
 class CityList extends Component {
 
@@ -90,15 +91,19 @@ class CityList extends Component {
 
   render() {
     return (
-      <div>
+      <div className="cityListBox">
         {/* 城市列表 */}
-        <List
-          width={300}
-          height={300}
-          rowCount={list.length}
-          rowHeight={30}
-          rowRenderer={this.rowRenderer}
-        />
+        <AutoSizer>
+          {({ height, width }) => (
+            <List
+              height={height}
+              rowCount={list.length}
+              rowHeight={20}
+              rowRenderer={this.rowRenderer}
+              width={width}
+            />
+          )}
+        </AutoSizer>
       </div>
     );
   }
