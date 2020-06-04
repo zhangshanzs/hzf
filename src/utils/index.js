@@ -50,3 +50,5 @@ export function getCurrCity() {
   }
 }
 
+export { CURR_CITY }
+

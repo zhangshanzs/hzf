@@ -5,11 +5,11 @@ import React, { Component } from 'react';
 // 导入封装后的axios
 import { getCityList, getHotCity } from '../../utils/api/city'
 // 获取当前城市
-import { getCurrCity } from '../../utils/index'
+import { getCurrCity, setLocalData, CURR_CITY } from '../../utils/index'
 // 导入列表组件
 import { List, AutoSizer } from 'react-virtualized'
 // 导入NavBar组件
-import { NavBar, Icon } from 'antd-mobile';
+import { NavBar, Icon, Toast } from 'antd-mobile';
 
 import './index.scss'
 
@@ -67,6 +67,21 @@ class CityList extends Component {
     const title = cityIndex[index];
     // title高度+城市高度*城市个数
     return 36 + 50 * cityList[title].length
+  }
+
+  // 选择城市
+  changeCity = (item) => {
+    const hasData = ['北京', '上海', '广州', '深圳'];
+    if (hasData.includes(item.label)) {
+      // 选择的是北上广深
+      // 把当前城市存入本地
+      setLocalData(CURR_CITY, JSON.stringify(item));
+      // 跳转到首页
+      this.props.history.push('/home')
+    } else {
+      // 不是北上广深就提示
+      Toast.fail('当前城市没有房源 !!!', 1);
+    }
   }
 
   // 按拼音首字母处理城市列表
@@ -132,7 +147,8 @@ class CityList extends Component {
         {/* 对应城市 */}
         {
           titleCity.map((item) => {
-            return <div key={item.value} className="name">{item.label}</div>
+            // 事件传参需要函数套函数
+            return <div onClick={() => this.changeCity(item)} key={item.value} className="name">{item.label}</div>
           })
         }
       </div>
