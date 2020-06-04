@@ -14,9 +14,15 @@ import { NavBar, Icon } from 'antd-mobile';
 import './index.scss'
 
 // list组件所用假数据
-const list = Array.from(new Array(100)).map((item, index) => index)
+// const list = Array.from(new Array(100)).map((item, index) => index)
 
 class CityList extends Component {
+  state = {
+    // 城市列表分类
+    cityIndex: [],
+    // 处理后的城市列表数据
+    cityList: {}
+  }
 
   componentDidMount() {
     this.getCityList()
@@ -45,6 +51,13 @@ class CityList extends Component {
       cityList['#'] = [currCity];
       cityIndex.unshift('#');
       console.log('处理完的数据：', cityList, cityIndex)
+
+
+      // 响应式
+      this.setState({
+        cityIndex,
+        cityList
+      })
     }
   }
   // 按拼音首字母处理城市列表
@@ -75,6 +88,19 @@ class CityList extends Component {
     }
   }
 
+  // 格式化字母
+  formatTitle(title) {
+    switch (title) {
+      case 'hot':
+        return '热门城市';
+      case '#':
+        return '当前城市';
+      default:
+        return title.toUpperCase();
+    }
+  }
+
+
   // 渲染列表项
   rowRenderer = ({
     key, // Unique key within array of rows
@@ -83,9 +109,23 @@ class CityList extends Component {
     isVisible, // This row is visible within the List (eg it is not an overscanned row)
     style // Style object to be applied to row (to position it)
   }) => {
+
+    const { cityIndex, cityList } = this.state;
+    // 拿索引逐次取出title
+    const title = cityIndex[index]
+    // 对应title下的城市
+    const titleCity = cityList[title]
+
     return (
-      <div key={key} style={style}>
-        {index}
+      <div key={key} style={style} className="city-item">
+        {/* 标题 */}
+        <div className="title">{this.formatTitle(title)}</div>
+        {/* 对应城市 */}
+        {
+          titleCity.map((item) => {
+            return <div key={item.value} className="name">{item.label}</div>
+          })
+        }
       </div>
     )
   }
@@ -106,8 +146,8 @@ class CityList extends Component {
           {({ height, width }) => (
             <List
               height={height}
-              rowCount={list.length}
-              rowHeight={20}
+              rowCount={this.state.cityIndex.length}
+              rowHeight={150}
               rowRenderer={this.rowRenderer}
               width={width}
             />
