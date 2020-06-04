@@ -6,9 +6,10 @@ import React, { Component } from 'react';
 import { getCityList, getHotCity } from '../../utils/api/city'
 // 获取当前城市
 import { getCurrCity } from '../../utils/index'
-
 // 导入列表组件
 import { List, AutoSizer } from 'react-virtualized'
+// 导入NavBar组件
+import { NavBar, Icon } from 'antd-mobile';
 
 import './index.scss'
 
@@ -92,6 +93,14 @@ class CityList extends Component {
   render() {
     return (
       <div className="cityListBox">
+        {/* 顶部导航 */}
+        <NavBar
+          mode="dark"
+          icon={<Icon type="left" />}
+          onLeftClick={() => this.props.history.goBack()}
+        >
+          城市列表
+        </NavBar>
         {/* 城市列表 */}
         <AutoSizer>
           {({ height, width }) => (
