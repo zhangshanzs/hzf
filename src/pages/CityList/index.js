@@ -4,8 +4,15 @@
 import React, { Component } from 'react';
 // 导入封装后的axios
 import { getCityList, getHotCity } from '../../utils/api/city'
-
+// 获取当前城市
 import { getCurrCity } from '../../utils/index'
+
+// 导入列表组件
+import { List } from 'react-virtualized'
+
+// list组件所用假数据
+const list = Array.from(new Array(100)).map((item, index) => index)
+console.log(list);
 
 class CityList extends Component {
 
@@ -66,10 +73,32 @@ class CityList extends Component {
     }
   }
 
+  // 渲染列表项
+  rowRenderer = ({
+    key, // Unique key within array of rows
+    index, // Index of row within collection
+    isScrolling, // The List is currently being scrolled
+    isVisible, // This row is visible within the List (eg it is not an overscanned row)
+    style // Style object to be applied to row (to position it)
+  }) => {
+    return (
+      <div key={key} style={style}>
+        {index}
+      </div>
+    )
+  }
+
   render() {
     return (
       <div>
-        CityList
+        {/* 城市列表 */}
+        <List
+          width={300}
+          height={300}
+          rowCount={list.length}
+          rowHeight={30}
+          rowRenderer={this.rowRenderer}
+        />
       </div>
     );
   }
