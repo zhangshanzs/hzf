@@ -60,6 +60,15 @@ class CityList extends Component {
       })
     }
   }
+
+  // 获取行高
+  getRowHeight = ({ index }) => {
+    const { cityIndex, cityList } = this.state;
+    const title = cityIndex[index];
+    // title高度+城市高度*城市个数
+    return 36 + 50 * cityList[title].length
+  }
+
   // 按拼音首字母处理城市列表
   formatCities = (body) => {
     // 城市列表信息 {首字母:[{···}，{···},..]}
@@ -147,7 +156,7 @@ class CityList extends Component {
             <List
               height={height}
               rowCount={this.state.cityIndex.length}
-              rowHeight={150}
+              rowHeight={this.getRowHeight}
               rowRenderer={this.rowRenderer}
               width={width}
             />
