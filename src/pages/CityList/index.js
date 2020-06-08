@@ -21,7 +21,9 @@ class CityList extends Component {
     // 城市列表分类
     cityIndex: [],
     // 处理后的城市列表数据
-    cityList: {}
+    cityList: {},
+    // 当前右侧激活索引
+    activeIndex: 0
   }
 
   componentDidMount() {
@@ -113,12 +115,12 @@ class CityList extends Component {
   }
 
   // 格式化字母
-  formatTitle(title) {
+  formatTitle(title, flag) {
     switch (title) {
       case 'hot':
-        return '热门城市';
+        return flag ? '热' : '热门城市';
       case '#':
-        return '当前城市';
+        return flag ? '当' : '当前城市';
       default:
         return title.toUpperCase();
     }
@@ -155,6 +157,37 @@ class CityList extends Component {
     )
   }
 
+  // 渲染右侧索引
+  renderCityIndex = () => {
+    const { cityIndex, activeIndex } = this.state;
+    return cityIndex.map((item, index) => {
+      return (
+        <li
+          key={item}
+          className="city-index-item"
+          onClick={() => {
+            // 滚动回到index行
+            this.listRef.scrollToRow(index)
+          }}
+        >
+          <span className={activeIndex === index ? 'index-active' : ''}>
+            {this.formatTitle(item, true)}
+          </span>
+        </li>
+      )
+    })
+  }
+
+  // 列表重新渲染时执行
+  onRowsRendered = ({ startIndex }) => {
+    // 只有两者不相等时做响应式
+    if (this.state.activeIndex !== startIndex) {
+      this.setState({
+        activeIndex: startIndex
+      })
+    }
+  }
+
   render() {
     return (
       <div className="cityListBox">
@@ -170,6 +203,12 @@ class CityList extends Component {
         <AutoSizer>
           {({ height, width }) => (
             <List
+              //获取组件实例 
+              ref={(ele) => this.listRef = ele}
+              // 控制滚动到行的对齐方式 默认auto, 使用“start”始终将行与列表顶部对齐
+              scrollToAlignment="start"
+              // 重新渲染时执行回调
+              onRowsRendered={this.onRowsRendered}
               height={height}
               rowCount={this.state.cityIndex.length}
               rowHeight={this.getRowHeight}
@@ -178,6 +217,10 @@ class CityList extends Component {
             />
           )}
         </AutoSizer>
+        {/* 右侧索引列表 */}
+        <ul className="city-index">
+          {this.renderCityIndex()}
+        </ul>
       </div>
     );
   }
